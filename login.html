@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - DonorTrack</title>
+<link rel="stylesheet" href="login.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+</head>
+
+<body>
+    
+
+<nav>
+    <div class="logo">
+        <img src="Glowing blood drop with dynamic light trail.png">
+        <h1 class="text">DonorTrack</h1>
+    </div>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="#">Find Donor</a>
+        <a href="#">Contact</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="left">
+        <h1>Welcome Back ❤️</h1>
+        <p>Login to continue saving lives.</p>
+    </div>
+
+    <div class="right">
+        <div class="form">
+
+            <h2>Login</h2>
+
+            <input type="email" placeholder="Email" class="email">
+            <input type="password" placeholder="Password" class="password">
+
+            <button class="loginBtn">Login</button>
+
+            <p>
+                Don't have an account?
+                <a href="signup.html">Register</a>
+            </p>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+   // =========================
+// FIREBASE INIT
+// =========================
+const firebaseConfig = {
+  apiKey: "AIzaSyA-ajhHNe4CjAuviuOcakPcjg2SODmEACU",
+  authDomain: "donortracer.firebaseapp.com",
+  projectId: "donortracer",
+  storageBucket: "donortracer.firebasestorage.app",
+  messagingSenderId: "245296915980",
+  appId: "1:245296915980:web:a9207d6496bcee3b147029",
+  measurementId: "G-42JJ5YE39C"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+
+// =========================
+// LOGIN SYSTEM (DEMO)
+// =========================
+const loginBtn = document.querySelector(".loginBtn");
+
+loginBtn.addEventListener("click", () => {
+
+    const email = document.querySelector(".email").value.trim();
+    const password = document.querySelector(".password").value;
+
+    if (!email || !password) {
+        alert("Fill all fields");
+        return;
+    }
+
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (!user) {
+        alert("No account found. Please register first.");
+        return;
+    }
+
+    if (email !== user.email) {
+        alert("Email not found");
+        return;
+    }
+
+    // password check (optional basic)
+    alert("Login Successful 🚀");
+
+    window.location.href = "index.html";
+});
+
+
+// =========================
+// GOOGLE LOGIN BUTTON
+// =========================
+const googleBtn = document.createElement("button");
+
+googleBtn.innerHTML = `
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+style="width:18px; height:18px;">
+Login with Google
+`;
+
+// style
+googleBtn.style.display = "flex";
+googleBtn.style.alignItems = "center";
+googleBtn.style.justifyContent = "center";
+googleBtn.style.gap = "10px";
+googleBtn.style.padding = "12px";
+googleBtn.style.borderRadius = "6px";
+googleBtn.style.background = "linear-gradient(90deg #34A853, #FBBC05, #EA4335)";
+googleBtn.style.border = "1px solid rgba(255,255,255,0.2)";
+googleBtn.style.color = "white";
+googleBtn.style.cursor = "pointer";
+googleBtn.style.transition = "0.3s";
+
+// hover
+googleBtn.addEventListener("mouseenter", () => {
+    googleBtn.style.transform = "translateY(-2px)";
+    googleBtn.style.boxShadow = "0 8px 20px rgba(232,15,14,0.4)";
+});
+
+googleBtn.addEventListener("mouseleave", () => {
+    googleBtn.style.transform = "translateY(0)";
+    googleBtn.style.boxShadow = "none";
+});
+
+
+// =========================
+// INSERT BUTTON ABOVE LOGIN
+// =========================
+loginBtn.parentNode.insertBefore(googleBtn, loginBtn);
+
+
+// =========================
+// GOOGLE SIGN-IN
+// =========================
+const provider = new firebase.auth.GoogleAuthProvider();
+
+googleBtn.addEventListener("click", () => {
+
+    firebase.auth().signInWithPopup(provider)
+    .then((result) => {
+
+        const user = result.user;
+
+        const userData = {
+            name: user.displayName,
+            email: user.email,
+            photo: user.photoURL
+        };
+
+        localStorage.setItem("user", JSON.stringify(userData));
+
+        alert("Welcome " + user.displayName + " 🚀");
+
+        window.location.href = "index.html";
+    })
+    .catch((error) => {
+        console.error(error);
+        alert("Login Failed ❌");
+    });
+
+});
+</script>
+</body>
+</html>

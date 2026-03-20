@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Track</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">
+            <img src="Glowing blood drop with dynamic light trail.png" alt="logo">
+            <h1 class="text">DonorTrack</h1>
+        </div>
+
+        <div>
+            <a href="index.html">Home</a>
+            <a href="#">Find Donor</a>
+            <a href="signup.html">Register</a>
+            <a href="#">Contact</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <img src="image.png" width="100%" height="600px"></img>
+        <div class="black_background">
+            <h1 class="heading">Donate Blood, Save Lives</h1>
+            <p class="subheading">Your one donation can save multiple lives.</p>
+            <a href="#" class="btn">Become a Donor</a>
+        </div>
+    </div>
+
+        <main>
+            <div class="cards">
+                <div class="images_1">
+                    <img class="img_2" src="image copy 2.png">
+                </div>
+                <div class="images_2">
+                    <img class="img_3" src="image copy 4.png">
+                </div>
+            </div>
+            <div class="txt" id="txt_0">
+                <h1>Find Donors</h1>
+                <h5>Quickly locate blood donors in your area.</h5>
+            </div>
+        </main>
+
+        <main class="main_2">
+            <div class="cards_2">
+                <div class="images_3">
+                    <img class="img_4" src="image copy 3.png">
+                </div>
+                <div class="images_4">
+                    <img class="img_5" src="image copy.png">
+                </div>
+            </div>
+
+            <div class="txt" id="txt_1">
+                <h1>Emergency Blood Requests</h1>
+                <h5>Instantly post urgent blood needs and connect with donors who can help.
+                </h5>
+            </div>
+
+        </main>
+
+        <div class="foot">
+        <p>© 2026, DonorTrack.com</p>
+    </div>
+
+<script>// =========================
+// 1. SMOOTH SCROLL
+// =========================
+document.documentElement.style.scrollBehavior = "smooth";
+
+
+// =========================
+// 2. SCROLL ANIMATION
+// =========================
+const elements = document.querySelectorAll("main, .txt, .cards, .cards_2, .html-section");
+
+elements.forEach((el) => {
+    el.style.opacity = "0";
+    el.style.transform = "translateY(60px)";
+    el.style.transition = "all 0.8s ease";
+});
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+        }
+    });
+}, { threshold: 0.2 });
+
+elements.forEach(el => observer.observe(el));
+
+
+
+
+// =========================
+// RIPPLE ANIMATION STYLE
+// =========================
+const style = document.createElement("style");
+style.innerHTML = `
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+`;
+document.head.appendChild(style);
+
+
+// =========================
+// 4. GLASS POPUP
+// =========================
+const popup = document.createElement("div");
+popup.style.cssText = `
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(10px);
+opacity:0;
+pointer-events:none;
+transition:0.4s;
+z-index:999;
+`;
+
+popup.innerHTML = `
+<div id="popupBox" style="
+background: rgba(255,255,255,0.05);
+border:1px solid rgba(255,255,255,0.1);
+padding:30px;
+border-radius:20px;
+color:white;
+text-align:center;
+width:400px;
+transform:scale(0.7);
+transition:0.4s;
+">
+<h2>🚀 Coming Soon</h2>
+<p>This feature will be available soon.</p>
+<button id="closePopup" style="
+margin-top:20px;
+padding:10px 20px;
+border:none;
+border-radius:8px;
+background:linear-gradient(90deg,#00A8FF,#18FF5B);
+color:white;
+cursor:pointer;
+">Close</button>
+</div>
+`;
+
+document.body.appendChild(popup);
+
+document.querySelectorAll(".learn-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        popup.style.opacity = "1";
+        popup.style.pointerEvents = "auto";
+        document.getElementById("popupBox").style.transform = "scale(1)";
+    });
+});
+
+popup.addEventListener("click", (e) => {
+    if (e.target.id === "closePopup" || e.target === popup) {
+        popup.style.opacity = "0";
+        popup.style.pointerEvents = "none";
+        document.getElementById("popupBox").style.transform = "scale(0.7)";
+    }
+});
+
+
+
+// 7. TYPING EFFECT
+// =========================
+const text = "Donate Blood, Save Lives.";
+const heading = document.querySelector(".heading");
+
+let i = 0;
+heading.innerHTML = "";
+
+function type() {
+    if (i < text.length) {
+        heading.innerHTML += text.charAt(i);
+        i++;
+        setTimeout(type, 80);
+    }
+}
+type();
+
+// Create progress bar
+const progress = document.createElement("div");
+
+progress.style.position = "fixed";
+progress.style.top = "0";
+progress.style.left = "0";
+progress.style.height = "3px";
+progress.style.width = "0%";
+progress.style.background = "linear-gradient(90deg,#E80F0E, #FD9D42, #D482DE)";
+progress.style.zIndex = "9999";
+
+document.body.appendChild(progress);
+
+// Update on scroll
+window.addEventListener("scroll", () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = (scrollTop / docHeight) * 100;
+
+    progress.style.width = scrollPercent + "%";
+});
+
+// =========================
+// USER NAV CONTROL (FINAL)
+// =========================
+const user = JSON.parse(localStorage.getItem("user"));
+
+const navRight = document.querySelector("nav div:last-child");
+
+if (user && navRight) {
+
+    // hide Register link
+    const links = navRight.querySelectorAll("a");
+    links.forEach(link => {
+        if (link.innerText.toLowerCase().includes("register")) {
+            link.style.display = "none";
+        }
+    });
+
+    // create profile icon
+    const profileImg = document.createElement("img");
+
+    profileImg.src = user.photo || "https://i.imgur.com/6VBx3io.png";
+    profileImg.style.width = "35px";
+    profileImg.style.height = "35px";
+    profileImg.style.borderRadius = "50%";
+    profileImg.style.cursor = "pointer";
+    profileImg.style.marginLeft = "15px";
+    profileImg.style.border = "2px solid #E80F0E";
+
+    navRight.appendChild(profileImg);
+
+    // dropdown
+    const dropdown = document.createElement("div");
+
+    dropdown.style.position = "absolute";
+    dropdown.style.top = "60px";
+    dropdown.style.right = "20px";
+    dropdown.style.background = "#111";
+    dropdown.style.padding = "12px";
+    dropdown.style.borderRadius = "8px";
+    dropdown.style.display = "none";
+    dropdown.style.boxShadow = "0 0 15px rgba(232,15,14,0.5)";
+
+    dropdown.innerHTML = `
+        <p style="margin:0; color:white; font-size:14px;">${user.name}</p>
+        <hr style="border:0.5px solid rgba(255,255,255,0.2); margin:8px 0;">
+        <p id="logoutBtn" style="margin:0; color:#FD9D42; cursor:pointer;">Sign Out</p>
+    `;
+
+    document.body.appendChild(dropdown);
+
+    // toggle dropdown
+    profileImg.addEventListener("click", () => {
+        dropdown.style.display =
+            dropdown.style.display === "block" ? "none" : "block";
+    });
+
+    // logout
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.removeItem("user");
+        alert("Logged out");
+        window.location.reload();
+    });
+
+    // close when clicking outside
+    window.addEventListener("click", (e) => {
+        if (!profileImg.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.style.display = "none";
+        }
+    });
+}
+</script>
+</body>
+
+</html>

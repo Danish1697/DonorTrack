@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DonorTrack</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+    <style>
+        /* MAIN LAYOUT */
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: calc(100vh - 60px);
+            padding: 0 80px;
+        }
+
+        /* LEFT TEXT */
+        .left {
+            color: white;
+            max-width: 500px;
+        }
+
+        .left h1 {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .left p {
+            font-size: 18px;
+            color: #eee;
+        }
+
+        /* RIGHT SIDE */
+        .right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">
+        <img src="Glowing blood drop with dynamic light trail.png" alt="logo">
+        <h1 class="text">DonorTrack</h1>
+    </div>
+
+    <div>
+        <a href="index.html">Home</a>
+        <a href="#">Find Donor</a>
+        <a href="#">Contact</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="left">
+        <h1>Donate Blood, Save Lives</h1>
+        <p>Your one step can save someone's life. Join DonorTrack today.</p>
+    </div>
+
+    <div class="right"></div>
+</div>
+
+<script>
+// =========================
+// CREATE SIGNUP FORM
+// =========================
+const right = document.querySelector(".right");
+
+const formBox = document.createElement("div");
+
+formBox.innerHTML = `
+<div style="
+width:360px;
+padding:30px;
+border-radius:15px;
+background: rgba(0,0,0,0.7);
+backdrop-filter: blur(12px);
+color:white;
+display:flex;
+flex-direction:column;
+gap:15px;
+box-shadow: 0 0 30px rgba(232,15,14,0.4);
+border: 1px solid rgba(255,255,255,0.1);
+">
+
+<h2 style="
+text-align:center;
+font-size:26px;
+background: linear-gradient(90deg, #E80F0E, #FD9D42);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+">Create Account</h2>
+
+<input type="text" placeholder="Full Name" class="input">
+<input type="email" placeholder="Email" class="input">
+
+<input type="text" placeholder="Mobile Number" class="input mobile">
+
+<div style="display:flex; gap:10px;">
+    <input type="text" placeholder="Enter OTP" class="input otp" style="flex:1;">
+    <button class="otpBtn" style="white-space:nowrap;">Send OTP</button>
+</div>
+
+<p class="showOtp" style="font-size:12px; color:#FD9D42;"></p>
+
+<div style="position:relative;">
+    <input type="password" placeholder="Password" class="input password">
+    <span class="toggle">👁️</span>
+</div>
+
+<div style="position:relative;">
+    <input type="password" placeholder="Confirm Password" class="input confirm">
+    <span class="toggle2">👁️</span>
+</div>
+
+<button class="signupBtn">Create Account</button>
+
+<p style="font-size:12px;text-align:center;">
+<a href="login.html" style="color:#FD9D42; text-decoration:none;">
+Already have an account?
+</a>
+</p>
+
+</div>
+`;
+
+right.appendChild(formBox);
+
+
+// =========================
+// INPUT STYLING
+// =========================
+document.querySelectorAll(".input").forEach(input => {
+    input.style.padding = "12px";
+    input.style.border = "1px solid rgba(255,255,255,0.1)";
+    input.style.borderRadius = "6px";
+    input.style.outline = "none";
+    input.style.background = "#0B0B0B";
+    input.style.color = "white";
+    input.style.width = "100%";
+
+    input.addEventListener("focus", () => {
+        input.style.boxShadow = "0 0 10px rgba(232,15,14,0.7)";
+        input.style.border = "1px solid #E80F0E";
+    });
+
+    input.addEventListener("blur", () => {
+        input.style.boxShadow = "none";
+        input.style.border = "1px solid rgba(255,255,255,0.1)";
+    });
+});
+
+
+// =========================
+// BUTTON STYLING
+// =========================
+document.querySelectorAll("button").forEach(btn => {
+    btn.style.padding = "12px";
+    btn.style.border = "none";
+    btn.style.borderRadius = "6px";
+    btn.style.background = "#E80F0E";
+    btn.style.color = "white";
+    btn.style.cursor = "pointer";
+    btn.style.transition = "0.3s";
+
+    btn.addEventListener("mouseenter", () => {
+        btn.style.background = "#c20c0c";
+        btn.style.transform = "translateY(-2px)";
+        btn.style.boxShadow = "0 10px 20px rgba(232,15,14,0.5)";
+    });
+
+    btn.addEventListener("mouseleave", () => {
+        btn.style.background = "#E80F0E";
+        btn.style.transform = "translateY(0)";
+        btn.style.boxShadow = "none";
+    });
+});
+
+
+// =========================
+// TOGGLE ICON STYLE
+// =========================
+document.querySelectorAll(".toggle, .toggle2").forEach(icon => {
+    icon.style.position = "absolute";
+    icon.style.right = "10px";
+    icon.style.top = "50%";
+    icon.style.transform = "translateY(-50%)";
+    icon.style.cursor = "pointer";
+});
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA-ajhHNe4CjAuviuOcakPcjg2SODmEACU",
+  authDomain: "donortracer.firebaseapp.com",
+  projectId: "donortracer",
+  storageBucket: "donortracer.firebasestorage.app",
+  messagingSenderId: "245296915980",
+  appId: "1:245296915980:web:a9207d6496bcee3b147029",
+  measurementId: "G-42JJ5YE39C"
+};
+firebase.initializeApp(firebaseConfig);
+// =========================
+// GOOGLE SIGNUP BUTTON
+// =========================
+const googleBtn = document.createElement("button");
+
+googleBtn.innerHTML = `
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+style="width:18px; height:18px;">
+Sign up with Google
+`;
+
+// styling (match your red theme)
+googleBtn.style.display = "flex";
+googleBtn.style.alignItems = "center";
+googleBtn.style.justifyContent = "center";
+googleBtn.style.gap = "10px";
+googleBtn.style.padding = "12px";
+googleBtn.style.borderRadius = "6px";
+googleBtn.style.background = "#0B0B0B";
+googleBtn.style.border = "1px solid rgba(255,255,255,0.2)";
+googleBtn.style.color = "white";
+googleBtn.style.cursor = "pointer";
+googleBtn.style.transition = "0.3s";
+googleBtn.style.background = "linear-gradient(90deg, #E80F0E)";
+
+// hover effect
+googleBtn.addEventListener("mouseenter", () => {
+    googleBtn.style.transform = "translateY(-2px)";
+    googleBtn.style.boxShadow = "0 8px 20px rgba(232,15,14,0.4)";
+});
+
+googleBtn.addEventListener("mouseleave", () => {
+    googleBtn.style.transform = "translateY(0)";
+    googleBtn.style.boxShadow = "none";
+});
+// =========================
+// CLICK (DEMO)
+// =========================
+const provider = new firebase.auth.GoogleAuthProvider();
+
+googleBtn.addEventListener("click", () => {
+
+    firebase.auth().signInWithPopup(provider)
+    .then((result) => {
+
+        const user = result.user;
+
+        // STORE USER DATA
+        const userData = {
+            name: user.displayName,
+            email: user.email,
+            photo: user.photoURL
+        };
+
+        localStorage.setItem("user", JSON.stringify(userData));
+
+        alert("Welcome " + user.displayName + " 🚀");
+
+        // redirect to home
+        window.location.href = "index.html";
+
+    })
+    .catch((error) => {
+        console.error(error);
+        alert("Login Failed ❌");
+    });
+
+});
+
+// =========================
+// INSERT ABOVE SIGNUP BUTTON
+// =========================
+const signupBtn = document.querySelector(".signupBtn");
+signupBtn.parentNode.insertBefore(googleBtn, signupBtn);
+
+// =========================
+// PASSWORD TOGGLE
+// =========================
+document.querySelector(".toggle").onclick = (e) => {
+    const p = document.querySelector(".password");
+    if (p.type === "password") {
+        p.type = "text";
+        e.target.innerText = "🙈";
+    } else {
+        p.type = "password";
+        e.target.innerText = "👁️";
+    }
+};
+
+document.querySelector(".toggle2").onclick = (e) => {
+    const c = document.querySelector(".confirm");
+    if (c.type === "password") {
+        c.type = "text";
+        e.target.innerText = "🙈";
+    } else {
+        c.type = "password";
+        e.target.innerText = "👁️";
+    }
+};
+
+
+// =========================
+// OTP SYSTEM
+// =========================
+let generatedOTP = "";
+let timer;
+
+const otpBtn = document.querySelector(".otpBtn"); // ✅ FIX
+
+otpBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    const mobile = document.querySelector(".mobile").value;
+
+    if (!/^[0-9]{10}$/.test(mobile)) {
+        alert("Enter valid mobile number");
+        return;
+    }
+
+    generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+
+    document.querySelector(".showOtp").innerText =
+        "OTP (testing): " + generatedOTP;
+
+    let time = 30;
+    otpBtn.disabled = true;
+
+    otpBtn.innerText = `Wait ${time}s`;
+
+    timer = setInterval(() => {
+        time--;
+        otpBtn.innerText = `Wait ${time}s`;
+
+        if (time === 0) {
+            clearInterval(timer);
+            otpBtn.disabled = false;
+            otpBtn.innerText = "Send OTP";
+        }
+    }, 1000);
+});
+// =========================
+// SIGNUP VALIDATION
+// =========================
+document.querySelector(".signupBtn").addEventListener("click", () => {
+
+    const name = document.querySelectorAll(".input")[0].value.trim();
+    const email = document.querySelectorAll(".input")[1].value.trim();
+    const mobile = document.querySelector(".mobile").value.trim();
+    const otp = document.querySelector(".otp").value.trim();
+    const password = document.querySelector(".password").value;
+    const confirm = document.querySelector(".confirm").value;
+
+    if (!name || !email || !mobile || !otp || !password || !confirm) {
+        alert("Fill all fields");
+        return;
+    }
+
+    if (!/^[^@]+@[^@]+\.[^@]+$/.test(email)) {
+        alert("Invalid email");
+        return;
+    }
+
+    if (otp !== generatedOTP) {
+        alert("Invalid OTP");
+        return;
+    }
+
+    if (password !== confirm) {
+        alert("Passwords do not match");
+        return;
+    }
+
+    // =========================
+// STORE NORMAL USER
+// =========================
+const userData = {
+    name: name,
+    email: email,
+    photo: null   // no image for normal signup
+};
+
+localStorage.setItem("user", JSON.stringify(userData));
+
+alert("Signup Successful 🚀");
+
+// redirect to home
+window.location.href = "index.html";
+});
+
+</script>
+
+</body>
+</html>
