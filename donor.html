@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="donor.css">
+</head>
+<body>
+     <nav>
+        <div class="logo">
+            <img src="Glowing blood drop with dynamic light trail.png" alt="logo">
+            <h1 class="text">DonorTrack</h1>
+        </div>
+
+        <div>
+            <a href="index.html">Home</a>
+            <a href="signup.html">Register</a>
+            <a href="#">Contact</a>
+        </div>
+    </nav>
+
+
+
+<script>
+// =========================
+// SMOOTH SCROLL
+// =========================
+document.documentElement.style.scrollBehavior = "smooth";
+
+
+// =========================
+// MAIN CONTAINER
+// =========================
+const container = document.createElement("div");
+
+container.style.display = "flex";
+container.style.flexDirection = "column";
+container.style.alignItems = "center";
+container.style.justifyContent = "center";
+container.style.marginTop = "60px";
+container.style.color = "white";
+
+document.body.appendChild(container);
+
+
+// =========================
+// TITLE
+// =========================
+const title = document.createElement("h1");
+title.innerText = "Find Blood Donors";
+title.style.marginBottom = "20px";
+title.style.fontSize = "32px";
+container.appendChild(title);
+
+
+// =========================
+// FILTER UI
+// =========================
+const filterBox = document.createElement("div");
+
+filterBox.style.display = "flex";
+filterBox.style.gap = "15px";
+filterBox.style.marginBottom = "30px";
+
+filterBox.innerHTML = `
+<select class="bloodFilter" style="
+padding:12px;
+border-radius:8px;
+background:#0B0B0B;
+color:white;
+border:1px solid rgba(255,255,255,0.2);
+">
+    <option value="">All Blood Groups</option>
+    <option>A+</option><option>A-</option>
+    <option>B+</option><option>B-</option>
+    <option>O+</option><option>O-</option>
+    <option>AB+</option><option>AB-</option>
+</select>
+
+<input type="text" class="searchName" placeholder="Search by name"
+style="
+padding:12px;
+border-radius:8px;
+background:#0B0B0B;
+color:white;
+border:1px solid rgba(255,255,255,0.2);
+">
+
+<button class="searchBtn" style="
+padding:12px 20px;
+border:none;
+border-radius:8px;
+background:linear-gradient(90deg,#E80F0E,#FD9D42);
+color:white;
+cursor:pointer;
+transition:0.3s;
+">Search</button>
+`;
+
+container.appendChild(filterBox);
+
+
+// =========================
+// DONOR GRID
+// =========================
+const donorGrid = document.createElement("div");
+
+donorGrid.style.display = "grid";
+donorGrid.style.gridTemplateColumns = "repeat(auto-fit, minmax(250px, 1fr))";
+donorGrid.style.gap = "20px";
+donorGrid.style.width = "80%";
+
+container.appendChild(donorGrid);
+
+
+// =========================
+// DEMO DONORS
+// =========================
+let donors = [
+    {name:"Rahul Sharma", blood:"A+", age:22, city:"Delhi"},
+    {name:"Priya Verma", blood:"O+", age:25, city:"Mumbai"},
+    {name:"Aman Singh", blood:"B+", age:21, city:"Punjab"},
+    {name:"Neha Gupta", blood:"AB+", age:24, city:"Chandigarh"},
+    {name:"Rohit Kumar", blood:"O-", age:28, city:"Lucknow"},
+    {name:"Simran Kaur", blood:"A-", age:23, city:"Amritsar"},
+    {name:"Karan Mehta", blood:"B-", age:26, city:"Jaipur"},
+    {name:"Anjali Sharma", blood:"AB-", age:22, city:"Delhi"},
+    {name:"Ankit", blood:"A+", age:27, city:"Amritsar"},
+    {name:"Chatpatta Mohit", blood:"O+", age:26, city:"punjab"},
+    {name:"Khatta Mehra", blood:"AB+", age:25, city:"Ludhiana"},
+    {name:"Noori allo", blood:"O+", age:28, city:"Amritsar"},
+];
+
+
+// =========================
+// ADD LOGGED USER AS DONOR
+// =========================
+const currentUser = JSON.parse(localStorage.getItem("user"));
+
+if (currentUser && currentUser.blood) {
+    donors.unshift({
+        name: currentUser.name,
+        blood: currentUser.blood,
+        age: currentUser.age || 20,
+        city: "Your Area"
+    });
+}
+
+
+// =========================
+// DISPLAY DONORS
+// =========================
+function displayDonors(list) {
+
+    donorGrid.innerHTML = "";
+
+    if (list.length === 0) {
+        donorGrid.innerHTML = "<h3>No donors found</h3>";
+        return;
+    }
+
+    list.forEach(donor => {
+
+        const card = document.createElement("div");
+
+        card.style.padding = "20px";
+        card.style.borderRadius = "15px";
+        card.style.background = "rgba(0,0,0,0.7)";
+        card.style.backdropFilter = "blur(10px)";
+        card.style.boxShadow = "0 0 20px rgba(232,15,14,0.4)";
+        card.style.border = "1px solid rgba(255,255,255,0.1)";
+        card.style.transition = "0.3s";
+
+        card.innerHTML = `
+            <h2>${donor.name}</h2>
+            <p>🩸 Blood: <b style="color:#FD9D42;">${donor.blood}</b></p>
+            <p>🎂 Age: ${donor.age}</p>
+            <p>📍 ${donor.city}</p>
+
+            <button class="contactBtn" style="
+                margin-top:10px;
+                padding:10px;
+                width:100%;
+                border:none;
+                border-radius:8px;
+                background:linear-gradient(90deg,#E80F0E,#FD9D42);
+                color:white;
+                cursor:pointer;
+                transition:0.3s;
+            ">Contact Donor</button>
+        `;
+
+        // hover effect
+        card.addEventListener("mouseenter", () => {
+            card.style.transform = "translateY(-5px)";
+            card.style.boxShadow = "0 10px 30px rgba(232,15,14,0.6)";
+        });
+
+        card.addEventListener("mouseleave", () => {
+            card.style.transform = "translateY(0)";
+        });
+
+        // contact click
+        card.querySelector(".contactBtn").addEventListener("click", () => {
+            alert("Contact request sent to " + donor.name);
+        });
+
+        donorGrid.appendChild(card);
+    });
+}
+
+
+// =========================
+// FILTER FUNCTION
+// =========================
+function filterDonors() {
+    const blood = document.querySelector(".bloodFilter").value;
+    const name = document.querySelector(".searchName").value.toLowerCase();
+
+    const filtered = donors.filter(d =>
+        (blood === "" || d.blood === blood) &&
+        d.name.toLowerCase().includes(name)
+    );
+
+    displayDonors(filtered);
+}
+
+
+// =========================
+// EVENTS
+// =========================
+document.querySelector(".searchBtn").addEventListener("click", filterDonors);
+
+document.querySelector(".bloodFilter").addEventListener("change", filterDonors);
+
+
+// =========================
+// INITIAL LOAD
+// =========================
+displayDonors(donors);
+
+
+// =========================
+// NAVBAR USER CONTROL
+// =========================
+const user = JSON.parse(localStorage.getItem("user"));
+const navRight = document.querySelector("nav div:last-child");
+
+if (user && navRight) {
+
+    // hide register
+    navRight.querySelectorAll("a").forEach(link => {
+        if (link.innerText.toLowerCase().includes("register")) {
+            link.style.display = "none";
+        }
+    });
+
+    // profile
+    const profile = document.createElement("img");
+
+    profile.src = user.photo || "https://i.imgur.com/6VBx3io.png";
+    profile.style.width = "35px";
+    profile.style.height = "35px";
+    profile.style.borderRadius = "50%";
+    profile.style.cursor = "pointer";
+    profile.style.marginLeft = "15px";
+    profile.style.border = "2px solid #E80F0E";
+
+    navRight.appendChild(profile);
+
+    // dropdown
+    const dropdown = document.createElement("div");
+
+    dropdown.style.position = "absolute";
+    dropdown.style.top = "60px";
+    dropdown.style.right = "20px";
+    dropdown.style.background = "#111";
+    dropdown.style.padding = "12px";
+    dropdown.style.borderRadius = "8px";
+    dropdown.style.display = "none";
+
+    dropdown.innerHTML = `
+        <p style="color:white;">${user.name}</p>
+        <p id="logoutBtn" style="color:#FD9D42; cursor:pointer;">Sign Out</p>
+    `;
+
+    document.body.appendChild(dropdown);
+
+    profile.onclick = () => {
+        dropdown.style.display =
+            dropdown.style.display === "block" ? "none" : "block";
+    };
+
+    document.getElementById("logoutBtn").onclick = () => {
+        localStorage.removeItem("user");
+        location.reload();
+    };
+
+    window.addEventListener("click", (e) => {
+        if (!profile.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.style.display = "none";
+        }
+    });
+}
+</script>
+</body>
+</html>
