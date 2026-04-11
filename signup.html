@@ -55,7 +55,7 @@
     <div>
         <a href="index.html">Home</a>
         <a href="donor.html">Find Donor</a>
-        <a href="#">Contact</a>
+        <a href="contact.html">Contact</a>
     </div>
 </nav>
 
@@ -103,6 +103,20 @@ background: linear-gradient(90deg, #E80F0E, #FD9D42);
 <input type="email" placeholder="Email" class="input">
 
 <input type="text" placeholder="Mobile Number" class="input mobile">
+<input type="number" placeholder="Age" class="input age">
+<input type="text" placeholder="Area / City / Location" class="input area">
+
+<select class="input blood">
+    <option value="">Select Blood Group</option>
+    <option>A+</option>
+    <option>A-</option>
+    <option>B+</option>
+    <option>B-</option>
+    <option>O+</option>
+    <option>O-</option>
+    <option>AB+</option>
+    <option>AB-</option>
+</select>
 
 <div style="display:flex; gap:10px;">
     <input type="text" placeholder="Enter OTP" class="input otp" style="flex:1;">
@@ -355,10 +369,13 @@ document.querySelector(".signupBtn").addEventListener("click", () => {
     const email = document.querySelectorAll(".input")[1].value.trim();
     const mobile = document.querySelector(".mobile").value.trim();
     const otp = document.querySelector(".otp").value.trim();
+    const age = document.querySelector(".age").value;
+    const area = document.querySelector(".area").value;
+    const blood = document.querySelector(".blood").value;
     const password = document.querySelector(".password").value;
     const confirm = document.querySelector(".confirm").value;
 
-    if (!name || !email || !mobile || !otp || !password || !confirm) {
+   if (!name || !email || !mobile || !age || !blood || !otp || !password || !confirm) {
         alert("Fill all fields");
         return;
     }
@@ -384,10 +401,24 @@ document.querySelector(".signupBtn").addEventListener("click", () => {
 const userData = {
     name: name,
     email: email,
+    age: age,
+    blood: blood,
+    city: area,
     photo: null   // no image for normal signup
 };
 
 localStorage.setItem("user", JSON.stringify(userData));
+let allUsers = JSON.parse(localStorage.getItem("donors")) || [];
+
+allUsers.push({
+    name: name,
+    email: email,
+    age: age,
+    blood: blood,
+    city: "Your Area"
+});
+
+localStorage.setItem("donors", JSON.stringify(allUsers));
 
 alert("Signup Successful 🚀");
 

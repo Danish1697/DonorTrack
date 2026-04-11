@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>DonorTrack</title>
     <link rel="stylesheet" href="donor.css">
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </head>
 <body>
      <nav>
@@ -16,13 +17,16 @@
         <div>
             <a href="index.html">Home</a>
             <a href="signup.html">Register</a>
-            <a href="#">Contact</a>
+            <a href="contact.html">Contact</a>
         </div>
     </nav>
 
 
 
 <script>
+    (function(){
+    emailjs.init("rW8qZgHqEEXd5FuhC"); // from EmailJS
+})();
 // =========================
 // SMOOTH SCROLL
 // =========================
@@ -131,6 +135,9 @@ let donors = [
     {name:"Khatta Mehra", blood:"AB+", age:25, city:"Ludhiana"},
     {name:"Noori allo", blood:"O+", age:28, city:"Amritsar"},
 ];
+let savedDonors = JSON.parse(localStorage.getItem("donors")) || [];
+
+donors = [...savedDonors, ...donors];
 
 
 // =========================
@@ -138,14 +145,7 @@ let donors = [
 // =========================
 const currentUser = JSON.parse(localStorage.getItem("user"));
 
-if (currentUser && currentUser.blood) {
-    donors.unshift({
-        name: currentUser.name,
-        blood: currentUser.blood,
-        age: currentUser.age || 20,
-        city: "Your Area"
-    });
-}
+
 
 
 // =========================
@@ -203,8 +203,34 @@ function displayDonors(list) {
 
         // contact click
         card.querySelector(".contactBtn").addEventListener("click", () => {
-            alert("Contact request sent to " + donor.name);
-        });
+
+    const currentUser = JSON.parse(localStorage.getItem("user"));
+
+    if (!currentUser) {
+        alert("Please login first!");
+        return;
+    }
+
+    // EMAIL DATA
+    const templateParams = {
+        user_name: currentUser.name,
+        user_blood: currentUser.blood,
+        user_age: currentUser.age,
+        donor_name: donor.name,
+        donor_blood: donor.blood,
+        donor_city: donor.city
+    };
+
+    // SEND EMAIL
+    emailjs.send("service_fyogpdd", "template_ji7xs9d", templateParams)
+    .then(() => {
+        alert("Request sent successfully! 🚀");
+    })
+    .catch(() => {
+        alert("Failed to send request ❌");
+    });
+
+});
 
         donorGrid.appendChild(card);
     });

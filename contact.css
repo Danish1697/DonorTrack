@@ -1,0 +1,152 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image:linear-gradient(90deg, #dc4f5b, #c38211);
+    font-family: sans-serif;
+}
+
+/* NAVBAR */
+nav {
+    height: 60px;
+    width: 100%;
+    background:linear-gradient(90deg,rgba(0, 0, 0, 0.91) ,#E80F0E);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* LOGO */
+nav .logo {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+nav .logo .text {
+    color: white;
+    font-size: 24px;
+    font-weight: bolder;
+    background: linear-gradient(90deg, #E80F0E, #FD9D42, #D482DE);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+nav .logo img {
+    width: 100px;   /* increase size */
+    height: 100px;
+    object-fit: contain;
+}
+
+/* NAV LINKS CONTAINER */
+nav div:last-child {
+    margin-right: 20px;
+}
+
+/* NAV LINKS */
+nav a {
+    text-decoration: none;
+    color: white;
+    margin: 0 15px;
+    font-size: 16px;
+    position: relative;
+    transition: 0.3s;
+}
+
+/* HOVER EFFECT (cool underline) */
+nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 0%;
+    height: 2px;
+    background: black;
+    transition: 0.3s;
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+/* HERO */
+.container {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+    border-bottom: 1px solid;
+    border-color: black;
+}
+
+/* CONTACT SECTION */
+.contact-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    padding: 20px;
+}
+
+.contact-container {
+    width: 400px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 30px;
+    border-radius: 15px;
+    color: white;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    text-align: center;
+}
+
+.contact-container h2 {
+    margin-bottom: 10px;
+}
+
+.contact-container p {
+    font-size: 14px;
+    margin-bottom: 20px;
+    opacity: 0.8;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 10px;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+}
+
+.contact-form button {
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #E80F0E;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.contact-form button:hover {
+    background: #c30d0d;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 15px;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    margin-top: 20px;
+}
